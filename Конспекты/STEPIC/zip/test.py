@@ -1,0 +1,1 @@
+print("Hi! You've found some easter egg!")
