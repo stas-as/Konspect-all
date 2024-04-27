@@ -4,6 +4,18 @@ from typing import Optional
 from typing import Annotated
 app = FastAPI()
 
+from contextlib import asynccontextmanager
+from datebase import create_tables, delete_tables
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+   await create_tables()
+   print("База готова")
+   yield
+   await delete_tables()
+   print("База очищена")
+
+app = FastAPI(lifespan=lifespan)
     
 class StaskAdd(BaseModel):
     name: str

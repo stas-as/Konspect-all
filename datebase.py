@@ -8,6 +8,7 @@ engine = create_async_engine(
 
 new_sessions = async_sessionmaker(engine,expire_on_commit=False)
 
+
 class Model(DeclarativeBase):
     pass
 
