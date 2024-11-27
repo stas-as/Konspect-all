@@ -1,38 +1,12 @@
-from fastapi import *
-from pydantic import BaseModel
-from typing import Optional
-from typing import Annotated
+from fastapi import FastAPI, Depends
+
 app = FastAPI()
 
-from contextlib import asynccontextmanager
-from datebase import create_tables, delete_tables
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-   await create_tables()
-   print("База готова")
-   yield
-   await delete_tables()
-   print("База очищена")
-
-app = FastAPI(lifespan=lifespan)
-    
-class StaskAdd(BaseModel):
-    name: str
-    description: Optional[str] = None
-    
-class STask(StaskAdd):
-    id : int
-
-tasks = []
-@app.post("/tasks")
-async def add_task(task: Annotated[StaskAdd, Depends()]):
-    tasks.append(task)
-    return{"OK":True}
+@app.get("/messages")
+async def all_messages(limit: int = 10, page: int = 1):
+    return {"messages": [{'limit': limit, 'page': page}]}
 
 
-# @app.get("/tasks")
-# def get_tasks():
-#     task = Task(name="Loading this video")
-#     return {"data": task}
-
+@app.get("/comments")
+async def all_comments(limit: int = 10, page: int = 1):
+    return {"comments": [{'limit': limit, 'page': page}]}
